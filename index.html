@@ -175,7 +175,7 @@
     /* ── Right side: browser mockup ── */
     .browser-frame {
       width: 100%;
-      max-width: 420px;
+      max-width: 560px;
       background: var(--surface);
       border-radius: 12px;
       border: 1px solid var(--border);
@@ -206,67 +206,223 @@
       text-overflow: ellipsis;
     }
 
-    /* ── Sidebar mockup content ── */
-    .sidebar-mock {
-      padding: 20px 18px;
+    .ext-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--bg);
+      flex-shrink: 0;
+    }
+
+    /* ── Browser body: LinkedIn page + sidebar ── */
+    .browser-body {
+      display: flex;
+      min-height: 420px;
+    }
+
+    /* Fake LinkedIn job page (left portion) */
+    .linkedin-mock {
+      flex: 1;
+      padding: 16px 14px;
+      background: #0a0a09;
+      border-right: 1px solid var(--border);
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .li-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .li-logo {
+      width: 18px;
+      height: 18px;
+      border-radius: 3px;
+      background: #0A66C2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: white;
+    }
+
+    .li-nav {
+      display: flex;
+      gap: 10px;
+      font-size: 9px;
+      color: var(--text-dim);
+    }
+
+    .li-job-title {
       font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 3px;
+      color: var(--text);
+    }
+
+    .li-company-line {
+      font-size: 10px;
+      color: var(--text-mid);
+      margin-bottom: 3px;
+    }
+
+    .li-meta {
+      font-size: 9px;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+    }
+
+    .li-buttons {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .li-btn {
+      font-size: 9px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 980px;
+      border: none;
+      cursor: default;
+    }
+
+    .li-btn-primary {
+      background: #0A66C2;
+      color: white;
+    }
+
+    .li-btn-secondary {
+      background: transparent;
+      color: var(--text-mid);
+      border: 1px solid var(--text-dim);
+    }
+
+    .li-section-title {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .li-text-line {
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      margin-bottom: 5px;
+      opacity: 0.5;
+    }
+
+    .li-text-line:nth-child(even) { width: 85%; }
+    .li-text-line:nth-child(odd) { width: 95%; }
+    .li-text-line:last-child { width: 60%; }
+
+    /* Fitted sidebar (right portion) */
+    .sidebar-mock {
+      width: 220px;
+      flex-shrink: 0;
+      padding: 0;
+      font-size: 13px;
+      background: var(--surface);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-inner {
+      padding: 14px 12px;
+      flex: 1;
+    }
+
+    .auto-detect-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      background: rgba(196, 149, 106, 0.08);
+      border-bottom: 1px solid var(--border);
+      font-size: 10px;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
     }
 
     .mock-role {
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 600;
       letter-spacing: -0.2px;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
 
     .mock-company {
-      font-size: 12px;
+      font-size: 10px;
       color: var(--text-dim);
-      margin-bottom: 16px;
+      margin-bottom: 10px;
     }
 
     /* Grade row */
     .grade-row {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
       background: var(--green-soft);
-      border-radius: 10px;
-      padding: 12px 14px;
+      border-radius: 8px;
+      padding: 8px 10px;
       margin-bottom: 6px;
     }
 
     .grade-circle {
-      width: 40px;
-      height: 40px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       background: var(--bg);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      font-size: 14px;
       font-weight: 700;
       color: var(--green);
       flex-shrink: 0;
     }
 
     .grade-text {
-      font-size: 13px;
+      font-size: 11px;
       color: var(--text);
       line-height: 1.4;
     }
 
     .grade-text span { font-weight: 600; }
-    .grade-sub { font-size: 11px; color: var(--text-mid); }
+    .grade-sub { font-size: 9px; color: var(--text-mid); }
 
     /* Requirements list */
     .req-label {
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 600;
       letter-spacing: 0.5px;
       text-transform: uppercase;
       color: var(--text-dim);
-      margin: 16px 0 8px;
+      margin: 10px 0 6px;
     }
 
     .req-list {
@@ -278,28 +434,28 @@
     .req-item {
       display: flex;
       align-items: flex-start;
-      gap: 10px;
-      padding: 8px 10px;
+      gap: 7px;
+      padding: 5px 8px;
       border-radius: 2px;
-      font-size: 12px;
+      font-size: 10px;
       line-height: 1.4;
     }
 
-    .req-item:first-child { border-radius: 8px 8px 2px 2px; }
-    .req-item:last-child { border-radius: 2px 2px 8px 8px; }
+    .req-item:first-child { border-radius: 6px 6px 2px 2px; }
+    .req-item:last-child { border-radius: 2px 2px 6px 6px; }
 
     .req-green { background: var(--green-soft); }
     .req-amber { background: var(--amber-soft); }
     .req-red { background: var(--red-soft); }
 
     .req-icon {
-      width: 16px;
-      height: 16px;
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 10px;
+      font-size: 8px;
       flex-shrink: 0;
       margin-top: 1px;
       border-width: 1.5px;
@@ -311,17 +467,17 @@
     .icon-red { border-color: var(--red); color: var(--red); }
 
     .req-content { flex: 1; min-width: 0; }
-    .req-name { font-weight: 600; color: var(--text); }
-    .req-note { font-size: 11px; color: var(--text-mid); margin-top: 2px; }
+    .req-name { font-weight: 600; color: var(--text); font-size: 10px; }
+    .req-note { font-size: 9px; color: var(--text-mid); margin-top: 1px; }
 
     .mock-cta {
       display: block;
-      width: 100%;
-      margin-top: 16px;
-      padding: 10px;
+      width: calc(100% - 24px);
+      margin: 10px 12px 14px;
+      padding: 7px;
       text-align: center;
       font-family: inherit;
-      font-size: 12px;
+      font-size: 10px;
       font-weight: 600;
       color: var(--bg);
       background: var(--accent);
@@ -420,71 +576,117 @@
           <div class="dot"></div>
           <div class="dot"></div>
           <div class="url-bar">linkedin.com/jobs/view/senior-data-engineer...</div>
+          <div class="ext-icon">F</div>
         </div>
 
-        <div class="sidebar-mock">
-          <div class="mock-role">Senior Data Engineer</div>
-          <div class="mock-company">Fidelity International &middot; Bangalore</div>
-
-          <div class="grade-row">
-            <div class="grade-circle">B+</div>
-            <div>
-              <div class="grade-text"><span>7 of 10</span> requirements covered</div>
-              <div class="grade-sub">Strong match with bridgeable gaps</div>
+        <div class="browser-body">
+          <!-- Fake LinkedIn job page -->
+          <div class="linkedin-mock">
+            <div class="li-header">
+              <div class="li-logo">in</div>
+              <div class="li-nav">
+                <span>Jobs</span>
+                <span>Messaging</span>
+                <span>Notifications</span>
+              </div>
             </div>
+            <div class="li-job-title">Senior Data Engineer</div>
+            <div class="li-company-line">Fidelity International &middot; Bangalore, India</div>
+            <div class="li-meta">2 days ago &middot; 147 applicants</div>
+            <div class="li-buttons">
+              <div class="li-btn li-btn-primary">Easy Apply</div>
+              <div class="li-btn li-btn-secondary">Save</div>
+            </div>
+            <div class="li-section-title">About the job</div>
+            <div class="li-text-line"></div>
+            <div class="li-text-line"></div>
+            <div class="li-text-line"></div>
+            <div class="li-text-line"></div>
+            <div class="li-text-line"></div>
+            <div class="li-text-line"></div>
+            <div class="li-text-line"></div>
+            <div class="li-text-line"></div>
+            <div style="height: 12px"></div>
+            <div class="li-section-title">Requirements</div>
+            <div class="li-text-line"></div>
+            <div class="li-text-line"></div>
+            <div class="li-text-line"></div>
+            <div class="li-text-line"></div>
+            <div class="li-text-line"></div>
           </div>
 
-          <div class="req-label">Requirements</div>
+          <!-- Fitted sidebar -->
+          <div class="sidebar-mock">
+            <div class="auto-detect-badge">
+              <div class="pulse-dot"></div>
+              Auto-detected from LinkedIn
+            </div>
 
-          <div class="req-list">
-            <div class="req-item req-green">
-              <div class="req-icon icon-green">&#10003;</div>
-              <div class="req-content">
-                <div class="req-name">Python, SQL, PySpark</div>
+            <div class="sidebar-inner">
+              <div class="mock-role">Senior Data Engineer</div>
+              <div class="mock-company">Fidelity International &middot; Bangalore</div>
+
+              <div class="grade-row">
+                <div class="grade-circle">B+</div>
+                <div>
+                  <div class="grade-text"><span>7 of 10</span> requirements covered</div>
+                  <div class="grade-sub">Strong match with bridgeable gaps</div>
+                </div>
+              </div>
+
+              <div class="req-label">Requirements</div>
+
+              <div class="req-list">
+                <div class="req-item req-green">
+                  <div class="req-icon icon-green">&#10003;</div>
+                  <div class="req-content">
+                    <div class="req-name">Python, SQL, PySpark</div>
+                  </div>
+                </div>
+                <div class="req-item req-green">
+                  <div class="req-icon icon-green">&#10003;</div>
+                  <div class="req-content">
+                    <div class="req-name">ETL pipeline design</div>
+                  </div>
+                </div>
+                <div class="req-item req-green">
+                  <div class="req-icon icon-green">&#10003;</div>
+                  <div class="req-content">
+                    <div class="req-name">Cloud platforms (AWS/Azure)</div>
+                  </div>
+                </div>
+                <div class="req-item req-amber">
+                  <div class="req-icon icon-amber">!</div>
+                  <div class="req-content">
+                    <div class="req-name">ML model deployment</div>
+                    <div class="req-note">Your pipeline work covers same patterns</div>
+                  </div>
+                </div>
+                <div class="req-item req-red">
+                  <div class="req-icon icon-red">&times;</div>
+                  <div class="req-content">
+                    <div class="req-name">Kubernetes in production</div>
+                    <div class="req-note">Genuine gap</div>
+                  </div>
+                </div>
+                <div class="req-item req-green">
+                  <div class="req-icon icon-green">&#10003;</div>
+                  <div class="req-content">
+                    <div class="req-name">Stakeholder communication</div>
+                  </div>
+                </div>
+                <div class="req-item req-amber">
+                  <div class="req-icon icon-amber">!</div>
+                  <div class="req-content">
+                    <div class="req-name">Real-time streaming</div>
+                    <div class="req-note">Batch experience is transferable</div>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="req-item req-green">
-              <div class="req-icon icon-green">&#10003;</div>
-              <div class="req-content">
-                <div class="req-name">ETL pipeline design</div>
-              </div>
-            </div>
-            <div class="req-item req-green">
-              <div class="req-icon icon-green">&#10003;</div>
-              <div class="req-content">
-                <div class="req-name">Cloud platforms (AWS/Azure)</div>
-              </div>
-            </div>
-            <div class="req-item req-amber">
-              <div class="req-icon icon-amber">!</div>
-              <div class="req-content">
-                <div class="req-name">ML model deployment</div>
-                <div class="req-note">Your data pipeline work covers the same patterns</div>
-              </div>
-            </div>
-            <div class="req-item req-red">
-              <div class="req-icon icon-red">&times;</div>
-              <div class="req-content">
-                <div class="req-name">Kubernetes in production</div>
-                <div class="req-note">Genuine gap</div>
-              </div>
-            </div>
-            <div class="req-item req-green">
-              <div class="req-icon icon-green">&#10003;</div>
-              <div class="req-content">
-                <div class="req-name">Stakeholder communication</div>
-              </div>
-            </div>
-            <div class="req-item req-amber">
-              <div class="req-icon icon-amber">!</div>
-              <div class="req-content">
-                <div class="req-name">Real-time streaming</div>
-                <div class="req-note">Batch experience is directly transferable</div>
-              </div>
-            </div>
+
+            <div class="mock-cta">See refactoring strategy &rarr;</div>
           </div>
-
-          <div class="mock-cta">See refactoring strategy &rarr;</div>
         </div>
       </div>
     </div>
