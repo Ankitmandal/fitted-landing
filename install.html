@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Install Fitted — takes about a minute</title>
+  <meta name="description" content="How to install the Fitted Chrome extension from a zip file.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="icon" type="image/png" href="icon-48.png">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0F0F0E;
+      --surface: #1A1918;
+      --border: #2A2926;
+      --text: #E8E4DC;
+      --text-mid: #A8A49C;
+      --text-dim: #6E6B64;
+      --accent: #C4956A;
+      --accent-soft: rgba(196, 149, 106, 0.12);
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 24px 48px;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .back {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+
+    .back:hover { color: var(--text-mid); }
+
+    .content {
+      max-width: 520px;
+      width: 100%;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.8px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--text-mid);
+      margin-bottom: 40px;
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 12px 24px;
+      border-radius: 980px;
+      border: none;
+      cursor: pointer;
+      background: var(--accent);
+      color: var(--bg);
+      text-decoration: none;
+      margin-bottom: 40px;
+    }
+
+    .download-btn:hover { background: #d4a57a; text-decoration: none; }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .step {
+      display: flex;
+      gap: 16px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .step:last-child { border-bottom: none; }
+
+    .step-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .step-text {
+      font-size: 15px;
+      color: var(--text-mid);
+      line-height: 1.6;
+      padding-top: 4px;
+    }
+
+    .step-text strong { color: var(--text); }
+
+    .step-text code {
+      font-size: 13px;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .help {
+      margin-top: 48px;
+      font-size: 13px;
+      color: var(--text-dim);
+      text-align: center;
+    }
+
+    .help a { color: var(--text-dim); }
+    .help a:hover { color: var(--text-mid); }
+  </style>
+</head>
+<body>
+
+  <a href="index.html" class="back">&larr; Back to Fitted</a>
+
+  <div class="content">
+    <h1>Install Fitted</h1>
+    <p class="subtitle">Takes about a minute. No coding required.</p>
+
+    <a href="fitted-v0.1.0.zip" download class="download-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download fitted-v0.1.0.zip
+    </a>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">
+          <strong>Unzip the file</strong> you just downloaded. You'll get a folder called <code>fitted-v0.1.0</code>.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">
+          Open Chrome and go to <code>chrome://extensions</code>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">
+          Turn on <strong>Developer mode</strong> — it's a toggle in the top-right corner. Completely safe, just lets you load your own extensions.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-text">
+          Click <strong>Load unpacked</strong> and select the <code>fitted-v0.1.0</code> folder you unzipped.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-text">
+          Sign in with Google, upload your resume (.docx), and start browsing jobs. Fitted will appear automatically on LinkedIn, Naukri, Indeed, and more.
+        </div>
+      </div>
+    </div>
+
+    <div class="help">
+      Questions? <a href="mailto:fitted.help@gmail.com">fitted.help@gmail.com</a>
+    </div>
+  </div>
+
+</body>
+</html>
