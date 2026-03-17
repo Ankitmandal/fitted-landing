@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fitted — AI Resume Tailoring for Every Job Application</title>
+  <meta name="description" content="See how your resume matches any job listing. AI-powered gap analysis and resume refactoring. Works on LinkedIn, Naukri, Indeed, and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="icon" type="image/png" href="icon-48.png">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #1C1B1A;
+      --surface: #242320;
+      --surface-alt: #2C2B28;
+      --border: #3A3830;
+      --text: #E8E4DC;
+      --text-mid: #A8A49C;
+      --text-dim: #6E6B64;
+      --accent: #C4956A;
+      --accent-soft: rgba(196, 149, 106, 0.12);
+      --green: #7EBF8E;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── Animations ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Header ── */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(28, 27, 26, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.5px;
+    }
+    .header-link {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-mid);
+      transition: color 0.2s;
+    }
+    .header-link:hover { color: var(--text); text-decoration: none; }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 140px 0 100px;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 6px 14px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(32px, 5.5vw, 56px);
+      font-weight: 700;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero p {
+      font-size: clamp(16px, 2vw, 19px);
+      color: var(--text-mid);
+      max-width: 560px;
+      margin: 0 auto 40px;
+      line-height: 1.6;
+    }
+    .hero-ctas {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 13px 28px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn:hover { text-decoration: none; }
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg);
+    }
+    .btn-primary:hover { background: #d4a57a; }
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--text-dim); }
+
+    /* ── Sections ── */
+    section { padding: 80px 0; }
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(24px, 3.5vw, 36px);
+      font-weight: 700;
+      letter-spacing: -0.8px;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .section-subtitle {
+      font-size: 16px;
+      color: var(--text-mid);
+      max-width: 520px;
+      line-height: 1.6;
+    }
+
+    /* ── How it works ── */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 48px;
+    }
+    .step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 24px;
+      text-align: center;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .step:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+    }
+    .step-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      background: var(--accent-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+    .step-icon svg { width: 28px; height: 28px; color: var(--accent); }
+    .step-number {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .step h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      letter-spacing: -0.2px;
+    }
+    .step p {
+      font-size: 14px;
+      color: var(--text-mid);
+      line-height: 1.5;
+    }
+
+    /* ── Demo ── */
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 48px;
+    }
+    .demo-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+    .demo-card:hover { border-color: var(--text-dim); }
+    .demo-placeholder {
+      width: 100%;
+      aspect-ratio: 3 / 2;
+      background: var(--surface-alt);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dim);
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .demo-card-label {
+      padding: 14px 18px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-mid);
+    }
+
+    /* ── Stats ── */
+    .stats-section {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      text-align: center;
+      padding: 20px 0;
+    }
+    .stat-number {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -1px;
+      margin-bottom: 6px;
+    }
+    .stat-text {
+      font-size: 14px;
+      color: var(--text-mid);
+      line-height: 1.5;
+      max-width: 240px;
+      margin: 0 auto;
+    }
+
+    /* ── Install ── */
+    .install-section { text-align: center; }
+    .install-section .section-subtitle {
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 32px;
+    }
+    .install-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      max-width: 480px;
+      margin: 40px auto 0;
+      text-align: left;
+    }
+    .install-step {
+      display: flex;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .install-step:last-child { border-bottom: none; }
+    .install-step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .install-step-text {
+      font-size: 14px;
+      color: var(--text-mid);
+      line-height: 1.5;
+    }
+    .install-step-text code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .install-note {
+      font-size: 13px;
+      color: var(--text-dim);
+      margin-top: 24px;
+    }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-left {
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+    .footer-links a {
+      font-size: 13px;
+      color: var(--text-dim);
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text); text-decoration: none; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .steps { grid-template-columns: 1fr; gap: 16px; }
+      .stats-grid { grid-template-columns: 1fr; gap: 40px; }
+      .hero { padding: 120px 0 60px; }
+      section { padding: 60px 0; }
+      .footer-inner { flex-direction: column; text-align: center; }
+    }
+    @media (max-width: 480px) {
+      .hero-ctas { flex-direction: column; align-items: center; }
+      .btn { width: 100%; justify-content: center; max-width: 280px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container header-inner">
+      <div class="logo">Fitted</div>
+      <a href="#install" class="header-link">Get started</a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">Free Chrome Extension</div>
+      <h1>See how your resume matches any job. Instantly.</h1>
+      <p>AI-powered resume analysis and refactoring. Works on LinkedIn, Naukri, Indeed, and any job listing page.</p>
+      <div class="hero-ctas">
+        <a href="#install" class="btn btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download free
+        </a>
+        <a href="#how-it-works" class="btn btn-secondary">See how it works</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how-it-works">
+    <div class="container">
+      <div class="section-label reveal">How it works</div>
+      <div class="section-title reveal">Three steps. Zero setup.</div>
+      <div class="section-subtitle reveal">Upload once, then browse jobs as you normally would. Fitted does the rest.</div>
+      <div class="steps">
+        <div class="step reveal">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/></svg>
+          </div>
+          <div class="step-number">Step 1</div>
+          <h3>Upload your resume once</h3>
+          <p>Upload your DOCX resume in the extension settings. It's parsed locally and stored in your browser.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <div class="step-number">Step 2</div>
+          <h3>Browse job listings as usual</h3>
+          <p>Visit any job page on LinkedIn, Indeed, Naukri, or Glassdoor. Fitted auto-detects the job description.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div class="step-number">Step 3</div>
+          <h3>See your match + get a tailored resume</h3>
+          <p>Instant grade, requirement-by-requirement analysis, and AI-refactored bullet points you accept or reject.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Demo -->
+  <section id="demo">
+    <div class="container">
+      <div class="section-label reveal">In action</div>
+      <div class="section-title reveal">Requirement-by-requirement clarity</div>
+      <div class="section-subtitle reveal">No more guessing whether you're qualified. See exactly what matches and what doesn't.</div>
+      <div class="demo-grid">
+        <div class="demo-card reveal">
+          <div class="demo-placeholder">Screenshot: Detection view</div>
+          <div class="demo-card-label">Match analysis with grade and coverage breakdown</div>
+        </div>
+        <div class="demo-card reveal">
+          <div class="demo-placeholder">Screenshot: Requirement map</div>
+          <div class="demo-card-label">Every requirement mapped to your experience</div>
+        </div>
+        <div class="demo-card reveal">
+          <div class="demo-placeholder">Screenshot: Refactoring view</div>
+          <div class="demo-card-label">AI-refactored bullets — accept, reject, or keep original</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="reveal">
+          <div class="stat-number">31%</div>
+          <div class="stat-text">more interviews when your resume is tailored to the role</div>
+        </div>
+        <div class="reveal">
+          <div class="stat-number">3%</div>
+          <div class="stat-text">of generic applications lead to an interview</div>
+        </div>
+        <div class="reveal">
+          <div class="stat-number">54%</div>
+          <div class="stat-text">of candidates never customize their resume. Be the other 46%.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Install -->
+  <section id="install" class="install-section">
+    <div class="container">
+      <div class="section-label reveal">Get started</div>
+      <div class="section-title reveal">Get Fitted &mdash; Free</div>
+      <div class="section-subtitle reveal">10 free resume refactorings per month. No credit card required.</div>
+
+      <div class="reveal">
+        <a href="fitted-v0.1.0.zip" download class="btn btn-primary" style="margin-top: 8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download fitted-v0.1.0.zip
+        </a>
+      </div>
+
+      <div class="install-steps reveal">
+        <div class="install-step">
+          <div class="install-step-num">1</div>
+          <div class="install-step-text">Download and unzip the file</div>
+        </div>
+        <div class="install-step">
+          <div class="install-step-num">2</div>
+          <div class="install-step-text">Open <code>chrome://extensions</code> in Chrome</div>
+        </div>
+        <div class="install-step">
+          <div class="install-step-num">3</div>
+          <div class="install-step-text">Enable <strong>Developer mode</strong> (top right toggle)</div>
+        </div>
+        <div class="install-step">
+          <div class="install-step-num">4</div>
+          <div class="install-step-text">Click <strong>Load unpacked</strong> and select the unzipped folder</div>
+        </div>
+        <div class="install-step">
+          <div class="install-step-num">5</div>
+          <div class="install-step-text">Sign in with Google, upload your resume, and start browsing jobs</div>
+        </div>
+      </div>
+
+      <div class="install-note reveal">Chrome Web Store listing coming soon.</div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-inner">
+      <div class="footer-left">Built by Ankit Mandal &middot; &copy; 2026 Fitted</div>
+      <div class="footer-links">
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="mailto:123ankit321@gmail.com">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll reveal -->
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+  </script>
+
+</body>
+</html>
