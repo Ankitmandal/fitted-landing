@@ -230,6 +230,28 @@ h1 em {
 
 .hero-secondary a:hover { color: var(--accent); }
 
+.hero-email-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-email-input {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 100px;
+  padding: 14px 24px;
+  width: 240px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.hero-email-input::placeholder { color: var(--text-dim); }
+.hero-email-input:focus { border-color: rgba(201, 160, 82, 0.3); }
+
 /* --- Product Mockup --- */
 .hero-visual {
   position: relative;
@@ -991,7 +1013,7 @@ footer .container {
 <nav>
   <div class="container">
     <div class="logo">Fitted<span>.</span></div>
-    <a href="#download" class="nav-cta">Get the extension</a>
+    <a href="#download" class="nav-cta" onclick="document.getElementById('hero-email').focus()">Get the extension</a>
   </div>
 </nav>
 
@@ -1004,11 +1026,18 @@ footer .container {
         <h1>You're not underqualified. Your&nbsp;resume is&nbsp;just speaking the <em>wrong language.</em></h1>
         <p class="hero-sub">Fitted reads the job description, grades your fit requirement by requirement, and rewrites your resume to close the gap. No keyword stuffing. No&nbsp;fabrication.</p>
         <div class="hero-actions" id="download">
-          <a href="fitted-v0.1.0.zip" download class="btn-primary">
+          <div class="hero-email-row" id="hero-gate">
+            <input type="email" id="hero-email" class="hero-email-input" placeholder="you@email.com">
+            <button class="btn-primary" onclick="submitHeroEmail()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download free
+            </button>
+          </div>
+          <a href="fitted-v0.1.0.zip" download class="btn-primary" id="hero-download" style="display:none">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Download free — Chrome extension
+            Download — Chrome extension
           </a>
-          <p class="hero-secondary">Chrome Web Store launch coming soon. <a href="#waitlist">Join the waitlist →</a></p>
+          <p class="hero-secondary" id="hero-secondary">Chrome Web Store launch coming soon. <a href="#waitlist">Join the waitlist →</a></p>
         </div>
       </div>
 
@@ -1240,14 +1269,17 @@ footer .container {
     <h2 class="final-title reveal">Know before you apply.</h2>
     <p class="final-sub reveal">Free — unlimited JD analysis, 10 resume refactors per month.</p>
     <div class="final-actions reveal">
-      <a href="fitted-v0.1.0.zip" download class="btn-primary">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Download the extension
-      </a>
-      <div class="waitlist-row">
-        <input type="email" id="waitlist-email" class="waitlist-input" placeholder="you@email.com">
-        <button class="btn-secondary" onclick="submitWaitlist()">Notify me for Chrome Web Store</button>
+      <div class="hero-email-row" id="final-gate">
+        <input type="email" id="final-email" class="hero-email-input" placeholder="you@email.com">
+        <button class="btn-primary" onclick="submitFinalEmail()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download free
+        </button>
       </div>
+      <a href="fitted-v0.1.0.zip" download class="btn-primary" id="final-download" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download again
+      </a>
       <p class="waitlist-note" id="waitlist-note">Works on LinkedIn, Indeed, Naukri, and any career page.</p>
     </div>
   </div>
@@ -1280,7 +1312,51 @@ const observer = new IntersectionObserver((entries) => {
 
 revealElements.forEach(el => observer.observe(el));
 
-// Waitlist
+// Hero email gate
+function submitHeroEmail() {
+  var input = document.getElementById('hero-email');
+  var email = input.value.trim();
+  if (!email || !email.includes('@')) { input.focus(); return; }
+  fetch('https://fitted-api-production.up.railway.app/api/waitlist', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: email }),
+  }).catch(function() {});
+  document.getElementById('hero-gate').style.display = 'none';
+  document.getElementById('hero-download').style.display = 'inline-flex';
+  document.getElementById('hero-secondary').innerHTML = 'Check your email for install instructions.';
+  // Auto-trigger download
+  var a = document.createElement('a');
+  a.href = 'fitted-v0.1.0.zip';
+  a.download = '';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+// Final CTA email gate
+function submitFinalEmail() {
+  var input = document.getElementById('final-email');
+  var email = input.value.trim();
+  if (!email || !email.includes('@')) { input.focus(); return; }
+  fetch('https://fitted-api-production.up.railway.app/api/waitlist', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: email }),
+  }).catch(function() {});
+  document.getElementById('final-gate').style.display = 'none';
+  document.getElementById('final-download').style.display = 'inline-flex';
+  document.getElementById('waitlist-note').innerHTML = "You're in — download started.";
+  document.getElementById('waitlist-note').style.color = 'var(--green)';
+  var a = document.createElement('a');
+  a.href = 'fitted-v0.1.0.zip';
+  a.download = '';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+// Waitlist (Chrome Web Store notify)
 function submitWaitlist() {
   var input = document.getElementById('waitlist-email');
   var email = input.value.trim();
