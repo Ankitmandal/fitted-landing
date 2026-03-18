@@ -3,51 +3,116 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fitted — You're probably qualified for more jobs than you think</title>
-  <meta name="description" content="A Chrome extension that reads the job description, compares it against your resume line by line, and shows you exactly where you stand.">
+  <title>Fitted — Your resume, rewritten for the job you actually want</title>
+  <meta name="description" content="A Chrome extension that reads the job description, compares it against your resume line by line, and shows you exactly where you stand. Then rewrites the weak spots.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="icon" type="image/png" href="icon-48.png">
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
       --bg: #0F0F0E;
       --surface: #1A1918;
+      --surface-alt: #222120;
       --border: #2A2926;
+      --border-light: #3A3836;
       --text: #E8E4DC;
       --text-mid: #A8A49C;
       --text-dim: #6E6B64;
       --accent: #C4956A;
+      --accent-soft: rgba(196, 149, 106, 0.1);
       --green: #8FBF7A;
       --green-soft: rgba(143, 191, 122, 0.12);
       --amber: #D4A74E;
       --amber-soft: rgba(212, 167, 78, 0.12);
       --red: #CC6B6B;
       --red-soft: rgba(204, 107, 107, 0.12);
+      --blue: #7EB0D4;
+      --blue-soft: rgba(126, 176, 212, 0.12);
     }
 
-    html, body {
-      height: 100%;
-      overflow: hidden;
+    html {
+      scroll-behavior: smooth;
       font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
       color: var(--text);
       -webkit-font-smoothing: antialiased;
     }
 
+    body { overflow-x: hidden; }
+
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
 
-    /* ── Layout: split left/right ── */
-    .page {
+    /* ── Nav ── */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
       display: flex;
-      height: 100vh;
-      width: 100%;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 56px;
+      background: rgba(15, 15, 14, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
     }
 
-    .left {
+    .nav-logo {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-mid);
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 7px 18px;
+      border-radius: 980px;
+      border: none;
+      cursor: pointer;
+      background: var(--accent);
+      color: var(--bg);
+      transition: background 0.15s;
+      text-decoration: none !important;
+    }
+
+    .nav-cta:hover { background: #d4a57a; }
+
+    /* ── Hero ── */
+    .hero {
+      display: flex;
+      min-height: 100vh;
+      padding-top: 56px;
+    }
+
+    .hero-left {
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -56,7 +121,7 @@
       min-width: 0;
     }
 
-    .right {
+    .hero-right {
       flex: 1;
       display: flex;
       align-items: center;
@@ -65,49 +130,63 @@
       min-width: 0;
     }
 
-    /* ── Left side: words ── */
-    .logo {
-      position: absolute;
-      top: 32px;
-      left: 56px;
-      font-size: 16px;
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
       font-weight: 600;
       color: var(--accent);
-      letter-spacing: -0.3px;
+      background: var(--accent-soft);
+      border: 1px solid rgba(196, 149, 106, 0.2);
+      border-radius: 980px;
+      padding: 5px 14px;
+      margin-bottom: 24px;
+      letter-spacing: 0.3px;
+    }
+
+    .pill-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
     }
 
     .headline {
-      font-size: clamp(28px, 3.2vw, 42px);
+      font-size: clamp(30px, 3.4vw, 46px);
       font-weight: 700;
-      letter-spacing: -1px;
-      line-height: 1.15;
-      margin-bottom: 28px;
-      max-width: 520px;
+      letter-spacing: -1.2px;
+      line-height: 1.12;
+      margin-bottom: 24px;
+      max-width: 540px;
+    }
+
+    .headline em {
+      font-style: normal;
+      color: var(--accent);
     }
 
     .body-copy {
       font-size: 15px;
-      line-height: 1.7;
+      line-height: 1.75;
       color: var(--text-mid);
-      max-width: 460px;
+      max-width: 480px;
       margin-bottom: 36px;
     }
 
-    .body-copy p { margin-bottom: 16px; }
-    .body-copy p:last-child { margin-bottom: 0; }
-    .body-copy .personal { color: var(--text-dim); font-style: italic; }
+    .body-copy strong { color: var(--text); font-weight: 500; }
 
     /* ── Email capture ── */
     .email-row {
       display: flex;
       gap: 8px;
-      max-width: 400px;
+      max-width: 420px;
       margin-bottom: 10px;
     }
 
     .email-row input {
       flex: 1;
-      padding: 12px 16px;
+      padding: 12px 18px;
       border-radius: 980px;
       border: 1px solid var(--border);
       background: var(--surface);
@@ -115,6 +194,7 @@
       font-family: inherit;
       font-size: 14px;
       outline: none;
+      transition: border-color 0.15s;
     }
 
     .email-row input:focus { border-color: var(--accent); }
@@ -127,24 +207,25 @@
       font-family: inherit;
       font-size: 14px;
       font-weight: 600;
-      padding: 12px 24px;
+      padding: 12px 28px;
       border-radius: 980px;
       border: none;
       cursor: pointer;
       background: var(--accent);
       color: var(--bg);
       white-space: nowrap;
-      transition: background 0.15s;
+      transition: background 0.15s, transform 0.1s;
     }
 
     .btn-cta:hover { background: #d4a57a; }
+    .btn-cta:active { transform: scale(0.98); }
 
     .email-success {
       display: none;
       font-size: 14px;
       color: var(--green);
       margin-bottom: 8px;
-      max-width: 400px;
+      max-width: 420px;
     }
 
     .email-success a { color: var(--green); text-decoration: underline; }
@@ -161,25 +242,35 @@
 
     .skip-link:hover { color: var(--text-mid); text-decoration: underline; }
 
-    .footer-line {
-      position: absolute;
-      bottom: 32px;
-      left: 56px;
-      font-size: 12px;
+    .trust-line {
+      margin-top: 20px;
+      font-size: 11px;
       color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 16px;
     }
 
-    .footer-line a { color: var(--text-dim); }
-    .footer-line a:hover { color: var(--text-mid); }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
 
-    /* ── Right side: browser mockup ── */
+    .trust-check {
+      color: var(--green);
+      font-size: 12px;
+    }
+
+    /* ── Browser mockup ── */
     .browser-frame {
       width: 100%;
-      max-width: 560px;
+      max-width: 580px;
       background: var(--surface);
       border-radius: 12px;
       border: 1px solid var(--border);
       overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.4);
     }
 
     .browser-chrome {
@@ -220,13 +311,12 @@
       flex-shrink: 0;
     }
 
-    /* ── Browser body: LinkedIn page + sidebar ── */
     .browser-body {
       display: flex;
-      min-height: 420px;
+      min-height: 440px;
     }
 
-    /* Fake LinkedIn job page (left portion) */
+    /* Fake LinkedIn job page */
     .linkedin-mock {
       flex: 1;
       padding: 16px 14px;
@@ -236,209 +326,85 @@
       overflow: hidden;
     }
 
-    .li-header {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 14px;
-    }
+    .li-header { display: flex; align-items: center; gap: 6px; margin-bottom: 14px; }
 
     .li-logo {
-      width: 18px;
-      height: 18px;
-      border-radius: 3px;
-      background: #0A66C2;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
-      font-weight: 700;
-      color: white;
+      width: 18px; height: 18px; border-radius: 3px; background: #0A66C2;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700; color: white;
     }
 
-    .li-nav {
-      display: flex;
-      gap: 10px;
-      font-size: 9px;
-      color: var(--text-dim);
-    }
+    .li-nav { display: flex; gap: 10px; font-size: 9px; color: var(--text-dim); }
+    .li-job-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+    .li-company-line { font-size: 10px; color: var(--text-mid); margin-bottom: 3px; }
+    .li-meta { font-size: 9px; color: var(--text-dim); margin-bottom: 12px; }
 
-    .li-job-title {
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 3px;
-      color: var(--text);
-    }
+    .li-buttons { display: flex; gap: 6px; margin-bottom: 14px; }
 
-    .li-company-line {
-      font-size: 10px;
-      color: var(--text-mid);
-      margin-bottom: 3px;
-    }
+    .li-btn { font-size: 9px; font-weight: 600; padding: 4px 12px; border-radius: 980px; border: none; }
+    .li-btn-primary { background: #0A66C2; color: white; }
+    .li-btn-secondary { background: transparent; color: var(--text-mid); border: 1px solid var(--text-dim); }
 
-    .li-meta {
-      font-size: 9px;
-      color: var(--text-dim);
-      margin-bottom: 12px;
-    }
-
-    .li-buttons {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 14px;
-    }
-
-    .li-btn {
-      font-size: 9px;
-      font-weight: 600;
-      padding: 4px 12px;
-      border-radius: 980px;
-      border: none;
-      cursor: default;
-    }
-
-    .li-btn-primary {
-      background: #0A66C2;
-      color: white;
-    }
-
-    .li-btn-secondary {
-      background: transparent;
-      color: var(--text-mid);
-      border: 1px solid var(--text-dim);
-    }
-
-    .li-section-title {
-      font-size: 10px;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 6px;
-    }
+    .li-section-title { font-size: 10px; font-weight: 600; margin-bottom: 6px; }
 
     .li-text-line {
-      height: 6px;
-      background: var(--border);
-      border-radius: 3px;
-      margin-bottom: 5px;
-      opacity: 0.5;
+      height: 6px; background: var(--border); border-radius: 3px;
+      margin-bottom: 5px; opacity: 0.5;
     }
-
     .li-text-line:nth-child(even) { width: 85%; }
     .li-text-line:nth-child(odd) { width: 95%; }
     .li-text-line:last-child { width: 60%; }
 
-    /* Fitted sidebar (right portion) */
+    /* Fitted sidebar */
     .sidebar-mock {
-      width: 220px;
-      flex-shrink: 0;
-      padding: 0;
-      font-size: 13px;
-      background: var(--surface);
-      display: flex;
-      flex-direction: column;
+      width: 220px; flex-shrink: 0; padding: 0; font-size: 13px;
+      background: var(--surface); display: flex; flex-direction: column;
     }
 
-    .sidebar-inner {
-      padding: 14px 12px;
-      flex: 1;
-    }
+    .sidebar-inner { padding: 14px 12px; flex: 1; }
 
     .auto-detect-badge {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 12px;
-      background: rgba(196, 149, 106, 0.08);
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 12px; background: var(--accent-soft);
       border-bottom: 1px solid var(--border);
-      font-size: 10px;
-      color: var(--accent);
-      font-weight: 500;
+      font-size: 10px; color: var(--accent); font-weight: 500;
     }
 
     .pulse-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
+      width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
       animation: pulse 2s ease-in-out infinite;
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 0.4; }
-      50% { opacity: 1; }
-    }
+    @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
 
-    .mock-role {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: -0.2px;
-      margin-bottom: 2px;
-    }
+    .mock-role { font-size: 12px; font-weight: 600; letter-spacing: -0.2px; margin-bottom: 2px; }
+    .mock-company { font-size: 10px; color: var(--text-dim); margin-bottom: 10px; }
 
-    .mock-company {
-      font-size: 10px;
-      color: var(--text-dim);
-      margin-bottom: 10px;
-    }
-
-    /* Grade row */
     .grade-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--green-soft);
-      border-radius: 8px;
-      padding: 8px 10px;
-      margin-bottom: 6px;
+      display: flex; align-items: center; gap: 8px;
+      background: var(--green-soft); border-radius: 8px; padding: 8px 10px; margin-bottom: 6px;
     }
 
     .grade-circle {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: var(--bg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--green);
-      flex-shrink: 0;
+      width: 32px; height: 32px; border-radius: 50%; background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; color: var(--green); flex-shrink: 0;
     }
 
-    .grade-text {
-      font-size: 11px;
-      color: var(--text);
-      line-height: 1.4;
-    }
-
+    .grade-text { font-size: 11px; color: var(--text); line-height: 1.4; }
     .grade-text span { font-weight: 600; }
     .grade-sub { font-size: 9px; color: var(--text-mid); }
 
-    /* Requirements list */
     .req-label {
-      font-size: 9px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      margin: 10px 0 6px;
+      font-size: 9px; font-weight: 600; letter-spacing: 0.5px;
+      text-transform: uppercase; color: var(--text-dim); margin: 10px 0 6px;
     }
 
-    .req-list {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
+    .req-list { display: flex; flex-direction: column; gap: 2px; }
 
     .req-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 7px;
-      padding: 5px 8px;
-      border-radius: 2px;
-      font-size: 10px;
-      line-height: 1.4;
+      display: flex; align-items: flex-start; gap: 7px;
+      padding: 5px 8px; border-radius: 2px; font-size: 10px; line-height: 1.4;
     }
 
     .req-item:first-child { border-radius: 6px 6px 2px 2px; }
@@ -449,17 +415,10 @@
     .req-red { background: var(--red-soft); }
 
     .req-icon {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 8px;
-      flex-shrink: 0;
-      margin-top: 1px;
-      border-width: 1.5px;
-      border-style: solid;
+      width: 14px; height: 14px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 8px; flex-shrink: 0; margin-top: 1px;
+      border-width: 1.5px; border-style: solid;
     }
 
     .icon-green { border-color: var(--green); color: var(--green); }
@@ -471,124 +430,451 @@
     .req-note { font-size: 9px; color: var(--text-mid); margin-top: 1px; }
 
     .mock-cta {
-      display: block;
-      width: calc(100% - 24px);
-      margin: 10px 12px 14px;
-      padding: 7px;
-      text-align: center;
-      font-family: inherit;
-      font-size: 10px;
-      font-weight: 600;
-      color: var(--bg);
-      background: var(--accent);
-      border: none;
-      border-radius: 980px;
-      cursor: default;
+      display: block; width: calc(100% - 24px); margin: 10px 12px 14px;
+      padding: 7px; text-align: center; font-family: inherit;
+      font-size: 10px; font-weight: 600; color: var(--bg);
+      background: var(--accent); border: none; border-radius: 980px;
     }
 
-    /* ── Mobile ── */
+    /* ── Section layout ── */
+    .section {
+      padding: 100px 56px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: clamp(24px, 2.8vw, 36px);
+      font-weight: 700;
+      letter-spacing: -0.8px;
+      line-height: 1.15;
+      margin-bottom: 16px;
+      max-width: 600px;
+    }
+
+    .section-subtitle {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text-mid);
+      max-width: 540px;
+      margin-bottom: 48px;
+    }
+
+    /* ── How it works ── */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .step-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 24px;
+      transition: border-color 0.2s;
+    }
+
+    .step-card:hover { border-color: var(--border-light); }
+
+    .step-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    .step-title {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.2px;
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-mid);
+    }
+
+    /* ── Features grid ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      transition: border-color 0.2s;
+    }
+
+    .feature-card:hover { border-color: var(--border-light); }
+
+    .feature-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      font-size: 16px;
+    }
+
+    .feature-title {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.2px;
+      margin-bottom: 6px;
+    }
+
+    .feature-desc {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-mid);
+    }
+
+    .feature-tag {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 4px;
+      margin-top: 10px;
+      letter-spacing: 0.3px;
+    }
+
+    /* ── Templates section ── */
+    .templates-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .template-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .template-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .template-preview {
+      width: 100%;
+      aspect-ratio: 8.5 / 11;
+      background: #fff;
+      border-radius: 4px;
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+
+    .template-preview-inner {
+      padding: 10px 8px;
+      font-size: 4px;
+      line-height: 1.4;
+      color: #333;
+      text-align: left;
+    }
+
+    .tp-name { font-weight: 700; margin-bottom: 2px; }
+    .tp-contact { font-size: 3px; color: #777; margin-bottom: 4px; }
+
+    .tp-heading {
+      font-weight: 700;
+      margin-top: 4px;
+      margin-bottom: 1px;
+      padding-bottom: 1px;
+    }
+
+    .tp-line {
+      height: 2px;
+      background: #ddd;
+      border-radius: 1px;
+      margin-bottom: 2px;
+    }
+
+    .tp-line:nth-child(even) { width: 85%; }
+    .tp-line:last-child { width: 60%; }
+
+    .template-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+
+    .template-desc {
+      font-size: 11px;
+      color: var(--text-mid);
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .ats-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--green);
+      background: var(--green-soft);
+      border-radius: 4px;
+      padding: 2px 8px;
+      letter-spacing: 0.3px;
+    }
+
+    /* ── ATS stats ── */
+    .ats-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-number.green { color: var(--green); }
+    .stat-number.amber { color: var(--amber); }
+    .stat-number.accent { color: var(--accent); }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-mid);
+      line-height: 1.5;
+    }
+
+    /* ── Format support ── */
+    .format-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .format-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .format-pill .check { color: var(--green); }
+    .format-pill .rec {
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border-radius: 4px;
+      padding: 2px 6px;
+    }
+
+    /* ── CTA section ── */
+    .cta-section {
+      text-align: center;
+      padding: 100px 56px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .cta-section .section-title {
+      margin: 0 auto 16px;
+      text-align: center;
+    }
+
+    .cta-section .section-subtitle {
+      margin: 0 auto 36px;
+      text-align: center;
+    }
+
+    .cta-section .email-row {
+      margin: 0 auto 10px;
+      max-width: 420px;
+    }
+
+    .cta-section .email-success,
+    .cta-section .skip-link {
+      text-align: center;
+      display: block;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    .cta-section .email-success { display: none; }
+
+    /* ── Footer ── */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-dim);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer a { color: var(--text-dim); }
+    .footer a:hover { color: var(--text-mid); }
+
+    .footer-links { display: flex; gap: 20px; }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate {
+      opacity: 0;
+      animation: fadeUp 0.5s ease-out forwards;
+    }
+
+    .animate-delay-1 { animation-delay: 0.1s; }
+    .animate-delay-2 { animation-delay: 0.2s; }
+    .animate-delay-3 { animation-delay: 0.3s; }
+    .animate-delay-4 { animation-delay: 0.4s; }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .templates-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
     @media (max-width: 900px) {
-      html, body { overflow: auto; height: auto; }
+      .hero { flex-direction: column; min-height: auto; }
+      .hero-left { padding: 100px 28px 40px; }
+      .hero-right { padding: 0 28px 60px; }
+      .browser-frame { max-width: 100%; }
+      .section { padding: 60px 28px; }
+      .nav { padding: 0 28px; }
+      .nav-links a:not(.nav-cta) { display: none; }
+      .steps-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .ats-stats { grid-template-columns: 1fr; }
+      .footer { padding: 28px; flex-direction: column; gap: 12px; }
+      .cta-section { padding: 60px 28px; }
+    }
 
-      .page {
-        flex-direction: column;
-        height: auto;
-        min-height: 100vh;
-      }
-
-      .left {
-        padding: 80px 28px 40px;
-        justify-content: flex-start;
-      }
-
-      .logo {
-        top: 24px;
-        left: 28px;
-      }
-
-      .right {
-        padding: 0 28px 60px;
-      }
-
-      .browser-frame {
-        max-width: 100%;
-      }
-
-      .footer-line {
-        position: relative;
-        bottom: auto;
-        left: auto;
-        text-align: center;
-        padding: 24px 28px 32px;
-      }
+    @media (max-width: 600px) {
+      .templates-grid { grid-template-columns: 1fr 1fr; }
+      .format-row { flex-wrap: wrap; }
     }
 
     @media (max-width: 480px) {
-      .email-row {
-        flex-direction: column;
-      }
-
-      .btn-cta {
-        width: 100%;
-        justify-content: center;
-      }
-
-      .headline {
-        font-size: 26px;
-      }
+      .email-row { flex-direction: column; }
+      .btn-cta { width: 100%; justify-content: center; }
+      .headline { font-size: 26px; }
     }
   </style>
 </head>
 <body>
 
-  <div class="logo">Fitted</div>
+  <!-- ── Nav ── -->
+  <nav class="nav">
+    <div class="nav-logo">Fitted</div>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#features">Features</a>
+      <a href="#templates">Templates</a>
+      <a href="#cta" class="nav-cta">Get started</a>
+    </div>
+  </nav>
 
-  <div class="page">
-    <!-- LEFT — The words -->
-    <div class="left">
-      <h1 class="headline">You're probably qualified for more jobs than you think.</h1>
-
-      <div class="body-copy">
-        <p>Most resumes get rejected not because you lack the skills — but because the way you describe them doesn't match how the job description asks for them.</p>
-        <p>Fitted is a Chrome extension that reads the JD, compares it against your resume line by line, and shows you exactly where you stand. When there's a gap, it's usually not missing experience — it's missing framing.</p>
-        <p class="personal">I built this because I got tired of the guesswork.</p>
+  <!-- ── Hero ── -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="pill animate">
+        <span class="pill-dot"></span>
+        Free Chrome extension
       </div>
 
-      <!-- Email capture -->
-      <div id="capture-form">
+      <h1 class="headline animate animate-delay-1">
+        Your resume, rewritten for <em>the job you actually want</em>.
+      </h1>
+
+      <div class="body-copy animate animate-delay-2">
+        <p>Fitted reads the job description, compares it against your resume requirement by requirement, and shows you exactly where you stand. Then <strong>rewrites the weak spots</strong> so the framing matches what the hiring manager is looking for.</p>
+      </div>
+
+      <div id="hero-capture" class="animate animate-delay-3">
         <div class="email-row">
-          <input type="email" id="waitlist-email" placeholder="you@email.com" />
-          <button class="btn-cta" onclick="submitEmail()">Try it free</button>
+          <input type="email" id="hero-email" placeholder="you@email.com" />
+          <button class="btn-cta" onclick="submitHeroEmail()">Try it free</button>
         </div>
-        <div class="email-success" id="email-success">
-          You're in — <a href="fitted-v0.1.0.zip" download>here's your download</a> &darr;
+        <div class="email-success" id="hero-success">
+          You're in &mdash; <a href="fitted-v0.1.0.zip" download>download the extension</a> &darr;
           &nbsp;&middot;&nbsp; <a href="install.html">Install guide</a>
         </div>
-        <button class="skip-link" id="skip-link" onclick="showDownload()">or just grab the zip &rarr;</button>
+        <button class="skip-link" id="hero-skip" onclick="showHeroDownload()">or just grab the zip &rarr;</button>
+      </div>
+
+      <div class="trust-line animate animate-delay-4">
+        <div class="trust-item"><span class="trust-check">&#10003;</span> 100% local parsing</div>
+        <div class="trust-item"><span class="trust-check">&#10003;</span> No data stored</div>
+        <div class="trust-item"><span class="trust-check">&#10003;</span> DOCX &middot; PDF &middot; TXT</div>
       </div>
     </div>
 
-    <!-- RIGHT — The proof -->
-    <div class="right">
-      <div class="browser-frame">
+    <div class="hero-right">
+      <div class="browser-frame animate animate-delay-2">
         <div class="browser-chrome">
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div>
           <div class="url-bar">linkedin.com/jobs/view/senior-data-engineer...</div>
           <div class="ext-icon">F</div>
         </div>
-
         <div class="browser-body">
-          <!-- Fake LinkedIn job page -->
           <div class="linkedin-mock">
             <div class="li-header">
               <div class="li-logo">in</div>
-              <div class="li-nav">
-                <span>Jobs</span>
-                <span>Messaging</span>
-                <span>Notifications</span>
-              </div>
+              <div class="li-nav"><span>Jobs</span><span>Messaging</span><span>Notifications</span></div>
             </div>
             <div class="li-job-title">Senior Data Engineer</div>
             <div class="li-company-line">Fidelity International &middot; Bangalore, India</div>
@@ -598,34 +884,23 @@
               <div class="li-btn li-btn-secondary">Save</div>
             </div>
             <div class="li-section-title">About the job</div>
-            <div class="li-text-line"></div>
-            <div class="li-text-line"></div>
-            <div class="li-text-line"></div>
-            <div class="li-text-line"></div>
-            <div class="li-text-line"></div>
-            <div class="li-text-line"></div>
-            <div class="li-text-line"></div>
-            <div class="li-text-line"></div>
+            <div class="li-text-line"></div><div class="li-text-line"></div>
+            <div class="li-text-line"></div><div class="li-text-line"></div>
+            <div class="li-text-line"></div><div class="li-text-line"></div>
+            <div class="li-text-line"></div><div class="li-text-line"></div>
             <div style="height: 12px"></div>
             <div class="li-section-title">Requirements</div>
-            <div class="li-text-line"></div>
-            <div class="li-text-line"></div>
-            <div class="li-text-line"></div>
-            <div class="li-text-line"></div>
+            <div class="li-text-line"></div><div class="li-text-line"></div>
+            <div class="li-text-line"></div><div class="li-text-line"></div>
             <div class="li-text-line"></div>
           </div>
-
-          <!-- Fitted sidebar -->
           <div class="sidebar-mock">
             <div class="auto-detect-badge">
-              <div class="pulse-dot"></div>
-              Auto-detected from LinkedIn
+              <div class="pulse-dot"></div>Auto-detected from LinkedIn
             </div>
-
             <div class="sidebar-inner">
               <div class="mock-role">Senior Data Engineer</div>
               <div class="mock-company">Fidelity International &middot; Bangalore</div>
-
               <div class="grade-row">
                 <div class="grade-circle">B+</div>
                 <div>
@@ -633,89 +908,315 @@
                   <div class="grade-sub">Strong match with bridgeable gaps</div>
                 </div>
               </div>
-
               <div class="req-label">Requirements</div>
-
               <div class="req-list">
-                <div class="req-item req-green">
-                  <div class="req-icon icon-green">&#10003;</div>
-                  <div class="req-content">
-                    <div class="req-name">Python, SQL, PySpark</div>
-                  </div>
-                </div>
-                <div class="req-item req-green">
-                  <div class="req-icon icon-green">&#10003;</div>
-                  <div class="req-content">
-                    <div class="req-name">ETL pipeline design</div>
-                  </div>
-                </div>
-                <div class="req-item req-green">
-                  <div class="req-icon icon-green">&#10003;</div>
-                  <div class="req-content">
-                    <div class="req-name">Cloud platforms (AWS/Azure)</div>
-                  </div>
-                </div>
-                <div class="req-item req-amber">
-                  <div class="req-icon icon-amber">!</div>
-                  <div class="req-content">
-                    <div class="req-name">ML model deployment</div>
-                    <div class="req-note">Your pipeline work covers same patterns</div>
-                  </div>
-                </div>
-                <div class="req-item req-red">
-                  <div class="req-icon icon-red">&times;</div>
-                  <div class="req-content">
-                    <div class="req-name">Kubernetes in production</div>
-                    <div class="req-note">Genuine gap</div>
-                  </div>
-                </div>
-                <div class="req-item req-green">
-                  <div class="req-icon icon-green">&#10003;</div>
-                  <div class="req-content">
-                    <div class="req-name">Stakeholder communication</div>
-                  </div>
-                </div>
-                <div class="req-item req-amber">
-                  <div class="req-icon icon-amber">!</div>
-                  <div class="req-content">
-                    <div class="req-name">Real-time streaming</div>
-                    <div class="req-note">Batch experience is transferable</div>
-                  </div>
-                </div>
+                <div class="req-item req-green"><div class="req-icon icon-green">&#10003;</div><div class="req-content"><div class="req-name">Python, SQL, PySpark</div></div></div>
+                <div class="req-item req-green"><div class="req-icon icon-green">&#10003;</div><div class="req-content"><div class="req-name">ETL pipeline design</div></div></div>
+                <div class="req-item req-green"><div class="req-icon icon-green">&#10003;</div><div class="req-content"><div class="req-name">Cloud platforms (AWS/Azure)</div></div></div>
+                <div class="req-item req-amber"><div class="req-icon icon-amber">!</div><div class="req-content"><div class="req-name">ML model deployment</div><div class="req-note">Your pipeline work covers same patterns</div></div></div>
+                <div class="req-item req-red"><div class="req-icon icon-red">&times;</div><div class="req-content"><div class="req-name">Kubernetes in production</div><div class="req-note">Genuine gap</div></div></div>
+                <div class="req-item req-green"><div class="req-icon icon-green">&#10003;</div><div class="req-content"><div class="req-name">Stakeholder communication</div></div></div>
+                <div class="req-item req-amber"><div class="req-icon icon-amber">!</div><div class="req-content"><div class="req-name">Real-time streaming</div><div class="req-note">Batch experience is transferable</div></div></div>
               </div>
             </div>
-
             <div class="mock-cta">See refactoring strategy &rarr;</div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="footer-line">Made by Ankit &middot; <a href="privacy-policy.html">Privacy</a></div>
+  <div class="section-divider"></div>
+
+  <!-- ── How it works ── -->
+  <section class="section" id="how">
+    <div class="section-label">How it works</div>
+    <h2 class="section-title">Three steps. One browser tab.</h2>
+    <p class="section-subtitle">Upload once, browse jobs, get instant analysis. No copy-pasting into ChatGPT, no prompt engineering.</p>
+
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-title">Upload your resume</div>
+        <div class="step-desc">Drop your DOCX, PDF, or TXT file &mdash; or paste text directly. Parsed locally in your browser, never leaves your device.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <div class="step-title">Browse any job listing</div>
+        <div class="step-desc">LinkedIn, Indeed, Naukri, Glassdoor, or any career page. Fitted auto-detects the job description and analyzes it against your resume, requirement by requirement.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <div class="step-title">Accept or reject each change</div>
+        <div class="step-desc">Review per-bullet rewrites with full reasoning. Accept what works, reject what doesn't. Export as DOCX, PDF, or plain text in your chosen template.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ── Features ── -->
+  <section class="section" id="features">
+    <div class="section-label">Features</div>
+    <h2 class="section-title">Built for people who are tired of the guesswork.</h2>
+    <p class="section-subtitle">Every feature exists because generic resume advice doesn't work. The JD tells you exactly what to say &mdash; Fitted reads it so you don't have to.</p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon" style="background: var(--green-soft); color: var(--green);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        </div>
+        <div class="feature-title">Requirement-by-requirement analysis</div>
+        <div class="feature-desc">Every JD requirement mapped against your resume. Green = covered. Amber = your experience applies but the framing is wrong. Red = genuine gap.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon" style="background: var(--blue-soft); color: var(--blue);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </div>
+        <div class="feature-title">Per-bullet refactoring with reasoning</div>
+        <div class="feature-desc">Each bullet shows why it was changed and what it now signals. Reframed, refined, compressed, or added &mdash; with the original always visible side-by-side.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon" style="background: var(--accent-soft); color: var(--accent);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div class="feature-title">Multi-format input</div>
+        <div class="feature-desc">Upload DOCX (recommended), PDF, or TXT. Or paste your resume text directly. All parsed into the same structured format locally.</div>
+        <div class="feature-tag" style="color: var(--green); background: var(--green-soft);">NEW</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon" style="background: var(--amber-soft); color: var(--amber);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 9h16"/><path d="M9 4v16"/></svg>
+        </div>
+        <div class="feature-title">4 ATS-safe resume templates</div>
+        <div class="feature-desc">Clean, Modern, Executive, Compact. Single-column, standard fonts, no tables or graphics. Every template passes 93% of ATS systems.</div>
+        <div class="feature-tag" style="color: var(--green); background: var(--green-soft);">NEW</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon" style="background: var(--green-soft); color: var(--green);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
+        <div class="feature-title">Export DOCX, PDF, or plain text</div>
+        <div class="feature-desc">DOCX for ATS applications (4% failure rate). PDF for recruiter emails. TXT for pasting into application forms. One click, named correctly.</div>
+        <div class="feature-tag" style="color: var(--green); background: var(--green-soft);">NEW</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon" style="background: var(--red-soft); color: var(--red);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="feature-title">Privacy first</div>
+        <div class="feature-desc">Resume parsed locally in your browser. JD text processed through our server and immediately discarded. No CV content stored anywhere. Ever.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ── Templates ── -->
+  <section class="section" id="templates">
+    <div class="section-label">Resume templates</div>
+    <h2 class="section-title">Four templates. All ATS-safe.</h2>
+    <p class="section-subtitle">Single-column layouts, standard fonts, no tables or graphics. The formatting rules that 93% of ATS systems parse correctly.</p>
+
+    <div class="templates-grid">
+      <!-- Clean -->
+      <div class="template-card">
+        <div class="template-preview">
+          <div class="template-preview-inner">
+            <div class="tp-name" style="font-family: Calibri, sans-serif; font-size: 6px;">John Anderson</div>
+            <div class="tp-contact">john@email.com | 555-0123 | New York</div>
+            <div class="tp-heading" style="font-family: Calibri, sans-serif; border-bottom: 0.5px solid #999;">Professional Summary</div>
+            <div class="tp-line"></div><div class="tp-line"></div><div class="tp-line"></div>
+            <div class="tp-heading" style="font-family: Calibri, sans-serif; border-bottom: 0.5px solid #999;">Work Experience</div>
+            <div class="tp-line"></div><div class="tp-line"></div><div class="tp-line"></div><div class="tp-line"></div>
+            <div class="tp-heading" style="font-family: Calibri, sans-serif; border-bottom: 0.5px solid #999;">Education</div>
+            <div class="tp-line"></div><div class="tp-line"></div>
+          </div>
+        </div>
+        <div class="template-name">Clean</div>
+        <div class="template-desc">Standard professional format. Calibri, comfortable spacing.</div>
+        <div class="ats-badge">&#10003; ATS-safe</div>
+      </div>
+
+      <!-- Modern -->
+      <div class="template-card">
+        <div class="template-preview">
+          <div class="template-preview-inner">
+            <div class="tp-name" style="font-family: Calibri, sans-serif; font-size: 7px;">John Anderson</div>
+            <div class="tp-contact">john@email.com | 555-0123 | New York</div>
+            <div style="border-bottom: 0.5px solid #ccc; margin-bottom: 4px;"></div>
+            <div class="tp-heading" style="font-family: Calibri, sans-serif; text-transform: uppercase; color: #2B4C7E; font-size: 4px;">PROFESSIONAL SUMMARY</div>
+            <div class="tp-line"></div><div class="tp-line"></div><div class="tp-line"></div>
+            <div class="tp-heading" style="font-family: Calibri, sans-serif; text-transform: uppercase; color: #2B4C7E; font-size: 4px;">WORK EXPERIENCE</div>
+            <div class="tp-line"></div><div class="tp-line"></div><div class="tp-line"></div><div class="tp-line"></div>
+            <div class="tp-heading" style="font-family: Calibri, sans-serif; text-transform: uppercase; color: #2B4C7E; font-size: 4px;">SKILLS</div>
+            <div class="tp-line"></div>
+          </div>
+        </div>
+        <div class="template-name">Modern</div>
+        <div class="template-desc">Sleek with subtle blue accents and inline skills.</div>
+        <div class="ats-badge">&#10003; ATS-safe</div>
+      </div>
+
+      <!-- Executive -->
+      <div class="template-card">
+        <div class="template-preview">
+          <div class="template-preview-inner" style="text-align: center;">
+            <div class="tp-name" style="font-family: Georgia, serif; font-size: 7px;">John Anderson</div>
+            <div class="tp-contact" style="text-align: center;">john@email.com | 555-0123 | New York</div>
+            <div class="tp-heading" style="font-family: Georgia, serif; font-variant: small-caps; text-align: left; margin-top: 6px;">Professional Summary</div>
+            <div class="tp-line" style="text-align: left;"></div><div class="tp-line"></div><div class="tp-line"></div>
+            <div class="tp-heading" style="font-family: Georgia, serif; font-variant: small-caps; text-align: left; margin-top: 6px;">Work Experience</div>
+            <div class="tp-line"></div><div class="tp-line"></div><div class="tp-line"></div>
+            <div class="tp-heading" style="font-family: Georgia, serif; font-variant: small-caps; text-align: left; margin-top: 6px;">Education</div>
+            <div class="tp-line"></div>
+          </div>
+        </div>
+        <div class="template-name">Executive</div>
+        <div class="template-desc">Serif font, centered header, generous spacing.</div>
+        <div class="ats-badge">&#10003; ATS-safe</div>
+      </div>
+
+      <!-- Compact -->
+      <div class="template-card">
+        <div class="template-preview">
+          <div class="template-preview-inner" style="padding: 6px 5px; font-size: 3.5px; line-height: 1.3;">
+            <div class="tp-name" style="font-family: Arial, sans-serif; font-size: 5px;">John Anderson</div>
+            <div class="tp-contact" style="font-size: 2.5px;">john@email.com | 555-0123 | New York</div>
+            <div class="tp-heading" style="font-family: Arial, sans-serif; text-decoration: underline; font-size: 3.5px;">Professional Summary</div>
+            <div class="tp-line"></div><div class="tp-line"></div><div class="tp-line"></div>
+            <div class="tp-heading" style="font-family: Arial, sans-serif; text-decoration: underline; font-size: 3.5px;">Work Experience</div>
+            <div class="tp-line"></div><div class="tp-line"></div><div class="tp-line"></div><div class="tp-line"></div><div class="tp-line"></div>
+            <div class="tp-heading" style="font-family: Arial, sans-serif; text-decoration: underline; font-size: 3.5px;">Skills</div>
+            <div class="tp-line"></div><div class="tp-line"></div>
+            <div class="tp-heading" style="font-family: Arial, sans-serif; text-decoration: underline; font-size: 3.5px;">Education</div>
+            <div class="tp-line"></div><div class="tp-line"></div>
+          </div>
+        </div>
+        <div class="template-name">Compact</div>
+        <div class="template-desc">Maximum content, minimum space. For one-page limits.</div>
+        <div class="ats-badge">&#10003; ATS-safe</div>
+      </div>
+    </div>
+
+    <!-- ATS stats -->
+    <div class="ats-stats">
+      <div class="stat-card">
+        <div class="stat-number green">4%</div>
+        <div class="stat-label">DOCX ATS failure rate<br><span style="font-size: 11px; color: var(--text-dim);">vs 18% for PDF</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number amber">93%</div>
+        <div class="stat-label">ATS parse rate with<br>single-column + standard fonts</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number accent">1,000</div>
+        <div class="stat-label">Resumes tested across Workday,<br>Taleo &amp; Greenhouse (EDLIGO 2025)</div>
+      </div>
+    </div>
+
+    <!-- Format support -->
+    <div style="margin-top: 48px;">
+      <div class="section-label">Export formats</div>
+      <p style="font-size: 14px; color: var(--text-mid); margin-bottom: 16px;">Use DOCX for online applications. PDF when emailing recruiters. TXT for pasting into forms.</p>
+      <div class="format-row">
+        <div class="format-pill"><span class="check">&#10003;</span> DOCX <span class="rec">Recommended</span></div>
+        <div class="format-pill"><span class="check">&#10003;</span> PDF</div>
+        <div class="format-pill"><span class="check">&#10003;</span> Plain text (.txt)</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ── Final CTA ── -->
+  <section class="cta-section" id="cta">
+    <div class="section-label" style="text-align: center;">Get started</div>
+    <h2 class="section-title">Stop guessing. Start matching.</h2>
+    <p class="section-subtitle">Upload your resume once. Browse any job listing. Get an instant, requirement-by-requirement breakdown and export a refactored version in under a minute.</p>
+
+    <div class="email-row">
+      <input type="email" id="cta-email" placeholder="you@email.com" />
+      <button class="btn-cta" onclick="submitCtaEmail()">Try it free</button>
+    </div>
+    <div class="email-success" id="cta-success">
+      You're in &mdash; <a href="fitted-v0.1.0.zip" download>download the extension</a> &darr;
+      &nbsp;&middot;&nbsp; <a href="install.html">Install guide</a>
+    </div>
+    <button class="skip-link" id="cta-skip" onclick="showCtaDownload()" style="margin: 0 auto;">or just grab the zip &rarr;</button>
+  </section>
+
+  <!-- ── Footer ── -->
+  <div class="section-divider"></div>
+  <footer class="footer">
+    <div>Made by Ankit &middot; v0.1.0</div>
+    <div class="footer-links">
+      <a href="privacy-policy.html">Privacy</a>
+      <a href="install.html">Install guide</a>
+    </div>
+  </footer>
 
   <script>
-    function submitEmail() {
-      const input = document.getElementById('waitlist-email');
-      const email = input.value.trim();
+    // ── Email capture ──
+    function submitToWaitlist(email, successId, skipId, inputId) {
+      var input = document.getElementById(inputId);
       if (!email || !email.includes('@')) { input.focus(); return; }
 
       fetch('https://fitted-api-production.up.railway.app/api/waitlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      }).catch(() => {});
+        body: JSON.stringify({ email: email }),
+      }).catch(function() {});
 
-      document.getElementById('email-success').style.display = 'block';
-      document.getElementById('skip-link').style.display = 'none';
+      document.getElementById(successId).style.display = 'block';
+      document.getElementById(skipId).style.display = 'none';
       input.style.display = 'none';
-      document.querySelector('.btn-cta').style.display = 'none';
+      input.closest('.email-row').querySelector('.btn-cta').style.display = 'none';
     }
 
-    function showDownload() {
-      document.getElementById('email-success').style.display = 'block';
-      document.getElementById('skip-link').style.display = 'none';
+    function submitHeroEmail() {
+      var email = document.getElementById('hero-email').value.trim();
+      submitToWaitlist(email, 'hero-success', 'hero-skip', 'hero-email');
     }
+
+    function showHeroDownload() {
+      document.getElementById('hero-success').style.display = 'block';
+      document.getElementById('hero-skip').style.display = 'none';
+    }
+
+    function submitCtaEmail() {
+      var email = document.getElementById('cta-email').value.trim();
+      submitToWaitlist(email, 'cta-success', 'cta-skip', 'cta-email');
+    }
+
+    function showCtaDownload() {
+      document.getElementById('cta-success').style.display = 'block';
+      document.getElementById('cta-skip').style.display = 'none';
+    }
+
+    // ── Scroll animations ──
+    (function() {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.step-card, .feature-card, .template-card, .stat-card').forEach(function(el) {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        observer.observe(el);
+      });
+    })();
   </script>
 
 </body>
