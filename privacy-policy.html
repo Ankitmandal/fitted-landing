@@ -4,39 +4,53 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fitted — Privacy Policy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      color: #1a1a1a;
-      background: #fafafa;
-      line-height: 1.7;
-      padding: 40px 20px;
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #e5e1db;
+      background: #0c0c0b;
+      line-height: 1.75;
+      padding: 60px 20px;
     }
     .container {
       max-width: 640px;
       margin: 0 auto;
     }
+    .back {
+      display: inline-block;
+      font-size: 13px;
+      color: #9b9590;
+      text-decoration: none;
+      margin-bottom: 32px;
+    }
+    .back:hover { color: #C4956A; }
     h1 {
-      font-size: 24px;
+      font-size: 28px;
       font-weight: 600;
       margin-bottom: 4px;
-      letter-spacing: -0.3px;
+      letter-spacing: -0.4px;
+      color: #e5e1db;
     }
     .updated {
       font-size: 13px;
-      color: #888;
-      margin-bottom: 32px;
+      color: #5c5752;
+      margin-bottom: 40px;
     }
     h2 {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 600;
-      margin-top: 28px;
-      margin-bottom: 8px;
+      margin-top: 32px;
+      margin-bottom: 10px;
+      color: #C4956A;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
     p, li {
       font-size: 14px;
-      color: #444;
+      color: #9b9590;
       margin-bottom: 12px;
     }
     ul {
@@ -44,72 +58,238 @@
       margin-bottom: 12px;
     }
     li { margin-bottom: 6px; }
-    a { color: #C4956A; }
-    .contact {
-      margin-top: 40px;
-      padding-top: 20px;
-      border-top: 1px solid #eee;
+    strong { color: #e5e1db; font-weight: 500; }
+    a { color: #C4956A; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 20px;
       font-size: 13px;
-      color: #888;
+    }
+    th {
+      text-align: left;
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      color: #e5e1db;
+      font-weight: 500;
+    }
+    td {
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      color: #9b9590;
+    }
+    .footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      font-size: 13px;
+      color: #5c5752;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Fitted — Privacy Policy</h1>
-    <div class="updated">Last updated: March 17, 2026</div>
+    <a href="https://ankitmandal.github.io/fitted-landing/" class="back">&larr; Back to Fitted</a>
 
-    <h2>What we collect</h2>
-    <ul>
-      <li><strong>Email address</strong> — provided via Google sign-in, used for account identification.</li>
-      <li><strong>Usage statistics</strong> — number of detections and refactorings performed, stored in Firebase Firestore.</li>
-      <li><strong>Account plan</strong> — your current plan tier (e.g., "free"), stored in Firebase Firestore.</li>
-    </ul>
+    <h1>Privacy Policy</h1>
+    <div class="updated">Last updated: April 5, 2026</div>
 
-    <h2>What we process</h2>
     <p>
-      When you analyze a job listing, the job description text and your CV text are sent to our server
-      for processing. This data is processed in real time and <strong>immediately discarded</strong> after
-      the response is returned. We do not store CV content, job description content, or refactoring results
-      on our servers.
+      Fitted ("we", "our", "the extension") is a <strong>Google Chrome browser extension</strong>
+      that analyzes job descriptions against your resume to show match scores and generate tailored
+      resume suggestions. We are committed to protecting your privacy. This policy explains what
+      data we collect, why, and how we handle it.
     </p>
 
-    <h2>Third-party services</h2>
-    <ul>
-      <li><strong>Groq</strong> — LLM provider used to analyze job descriptions and generate refactoring suggestions. Job description and CV text are sent to Groq's API for processing.</li>
-      <li><strong>Firebase Authentication</strong> — Google sign-in for account management.</li>
-      <li><strong>Firebase Firestore</strong> — stores your email, usage counts, and account plan.</li>
-    </ul>
+    <h2>Data We Collect</h2>
+    <table>
+      <tr><th>Data</th><th>Purpose</th><th>Stored where</th></tr>
+      <tr>
+        <td>Email address</td>
+        <td>Account identification via Google sign-in</td>
+        <td>Firebase (server)</td>
+      </tr>
+      <tr>
+        <td>Usage counts</td>
+        <td>Enforce free-tier limits (detections/day, refactorings/month)</td>
+        <td>Firebase (server)</td>
+      </tr>
+      <tr>
+        <td>Account plan</td>
+        <td>Determine feature access (free vs. pro)</td>
+        <td>Firebase (server)</td>
+      </tr>
+      <tr>
+        <td>Analysis metadata</td>
+        <td>Role title, company, match grade for your history</td>
+        <td>Firebase (server)</td>
+      </tr>
+    </table>
 
-    <h2>What we store</h2>
-    <ul>
-      <li>Your email address</li>
-      <li>Usage counts (detections per day, refactorings per month)</li>
-      <li>Account plan information</li>
-      <li>Analysis metadata (role title, company, match grade — no CV or JD content)</li>
-    </ul>
-
-    <h2>What we do NOT store</h2>
-    <ul>
-      <li>Your CV content</li>
-      <li>Job description text</li>
-      <li>Refactoring results or suggestions</li>
-    </ul>
-
-    <h2>Data retention</h2>
+    <h2>Data We Process but Do NOT Store</h2>
     <p>
-      Account data is retained as long as your account exists. You may request deletion of your account
-      and all associated data by contacting us at the email below.
+      When you analyze a job listing, the following data is sent to our API server
+      (hosted on <strong>Railway</strong>) for real-time processing:
+    </p>
+    <ul>
+      <li><strong>Job description text</strong> — extracted from the web page you are viewing, or fetched from the public job listing page.</li>
+      <li><strong>Your resume content</strong> — parsed from the DOCX file you uploaded.</li>
+    </ul>
+    <p>
+      This data is forwarded from our Railway-hosted API server to the LLM provider (Groq) for
+      analysis, and <strong>immediately discarded</strong> after the response is returned. We do not
+      log, store, or retain your resume content or job description text on our servers.
+    </p>
+    <p>
+      Groq does not retain API inputs by default. Groq may temporarily log inputs for up to 30 days
+      solely for troubleshooting platform reliability issues or investigating abuse, per their
+      <a href="https://console.groq.com/docs/your-data" target="_blank" rel="noopener">data policy</a>.
     </p>
 
-    <h2>Your rights</h2>
+    <h2>Data Stored Locally (Your Browser)</h2>
     <p>
-      You may request access to, correction of, or deletion of your personal data at any time
-      by contacting us.
+      The following data is stored in <code>chrome.storage.local</code> on your device and never
+      leaves your browser unless you initiate an analysis:
+    </p>
+    <ul>
+      <li>Your parsed resume (structured sections extracted from your uploaded file)</li>
+      <li>Cached analysis results (match scores, requirement maps)</li>
+      <li>Your refactoring decisions (accepted/rejected suggestions)</li>
+      <li>Extension preferences and settings</li>
+    </ul>
+
+    <h2>Data We Do NOT Collect</h2>
+    <ul>
+      <li>Browsing history or URLs visited (we only read the current page when you open the side panel on a job listing)</li>
+      <li>Cookies or tracking identifiers</li>
+      <li>Personal data beyond your email address</li>
+      <li>Data from pages that are not job listings</li>
+    </ul>
+
+    <h2>How the Extension Accesses Web Page Content</h2>
+    <p>
+      Fitted uses a content script that runs on supported job listing sites (LinkedIn, Indeed,
+      Naukri, Glassdoor, Greenhouse, Lever, Ashby, Instahyre). This script:
+    </p>
+    <ul>
+      <li>Detects whether the current page is a job listing (via URL pattern matching)</li>
+      <li>On LinkedIn: reads the job ID from the URL; the side panel then fetches the public job page to extract the description</li>
+      <li>On other job boards: reads the job description text and title directly from the page</li>
+      <li>Does <strong>not</strong> modify the page content in any way</li>
+      <li>Does <strong>not</strong> track your browsing across sites</li>
+      <li>Only activates on pages matching job listing URL patterns</li>
+    </ul>
+
+    <h2>Permissions and Why We Need Them</h2>
+    <p>
+      Fitted is a Chrome extension (Manifest V3) that requests the following permissions:
+    </p>
+    <table>
+      <tr><th>Permission</th><th>Why it's needed</th></tr>
+      <tr>
+        <td><code>sidePanel</code></td>
+        <td>Display the match analysis and refactoring UI in Chrome's side panel alongside job pages</td>
+      </tr>
+      <tr>
+        <td><code>storage</code></td>
+        <td>Save your resume, preferences, and cached results locally in your browser</td>
+      </tr>
+      <tr>
+        <td><code>activeTab</code></td>
+        <td>Read the current tab's URL to detect when you're viewing a job listing page</td>
+      </tr>
+      <tr>
+        <td><code>scripting</code></td>
+        <td>Inject the content script into job listing pages to extract job description text</td>
+      </tr>
+      <tr>
+        <td>Host permissions (8 job sites)</td>
+        <td>Auto-detect job listings on LinkedIn, Indeed, Naukri, Glassdoor, Greenhouse, Lever, Ashby, and Instahyre. Required to run content scripts and fetch job page content on these sites</td>
+      </tr>
+    </table>
+
+    <h2>Third-Party Services</h2>
+    <p>
+      We use the following third-party services to provide the extension's functionality.
+      Data is only shared with these services as described below:
+    </p>
+    <table>
+      <tr><th>Service</th><th>Purpose</th><th>Data shared</th></tr>
+      <tr>
+        <td><a href="https://groq.com/privacy-policy" target="_blank" rel="noopener">Groq</a></td>
+        <td>LLM provider for job analysis and resume refactoring</td>
+        <td>JD text + resume text (not retained by Groq by default; may be temporarily logged for up to 30 days for reliability/abuse monitoring)</td>
+      </tr>
+      <tr>
+        <td>Railway</td>
+        <td>Hosts our API server that processes analysis requests</td>
+        <td>JD text + resume text (passed through to Groq, not stored on our server)</td>
+      </tr>
+      <tr>
+        <td>Firebase Auth</td>
+        <td>Google sign-in for account management</td>
+        <td>Email, display name</td>
+      </tr>
+      <tr>
+        <td>Firebase Firestore</td>
+        <td>Usage tracking and account data</td>
+        <td>Email, usage counts, plan tier, analysis metadata</td>
+      </tr>
+      <tr>
+        <td><a href="https://dodopayments.com/legal/privacy-policy" target="_blank" rel="noopener">Dodo Payments</a></td>
+        <td>Payment processing for Pro plan subscriptions</td>
+        <td>Email address (all payment and billing data is handled directly by Dodo Payments; we do not receive or store credit card numbers or financial details)</td>
+      </tr>
+    </table>
+
+    <h2>Data Sharing</h2>
+    <ul>
+      <li>We do <strong>not</strong> sell your data to third parties.</li>
+      <li>We do <strong>not</strong> use your data for advertising.</li>
+      <li>We do <strong>not</strong> share your data for purposes unrelated to the extension's functionality.</li>
+      <li>Data is only shared with the third-party services listed above, solely to provide the extension's features.</li>
+    </ul>
+
+    <h2>Data Retention</h2>
+    <ul>
+      <li><strong>Server data</strong> — account info and usage counts are retained as long as your account exists. You can request deletion at any time.</li>
+      <li><strong>Local data</strong> — stored in your browser until you uninstall the extension or clear it via Settings.</li>
+      <li><strong>Processing data</strong> — resume and JD text are discarded immediately after each analysis completes. They are not logged or stored on our servers.</li>
+      <li><strong>Groq</strong> — does not retain inputs by default. May temporarily log for up to 30 days for platform reliability, per their <a href="https://console.groq.com/docs/your-data" target="_blank" rel="noopener">data policy</a>.</li>
+    </ul>
+
+    <h2>Data Security</h2>
+    <p>
+      All communication between the extension and our server uses HTTPS/TLS encryption.
+      Authentication uses secure session tokens. Your resume is parsed and stored locally
+      in your browser — it is only transmitted when you actively request an analysis.
     </p>
 
-    <div class="contact">
-      Contact: <a href="mailto:privacy@fitted.app">privacy@fitted.app</a>
+    <h2>Children's Privacy</h2>
+    <p>
+      Fitted is not intended for use by anyone under 13 years of age. We do not knowingly
+      collect data from children.
+    </p>
+
+    <h2>Your Rights</h2>
+    <p>You may at any time:</p>
+    <ul>
+      <li>Request access to the personal data we hold about you</li>
+      <li>Request correction or deletion of your data</li>
+      <li>Delete your local data by uninstalling the extension</li>
+      <li>Delete your resume from the extension via Settings</li>
+    </ul>
+
+    <h2>Changes to This Policy</h2>
+    <p>
+      We may update this policy from time to time. Changes will be reflected by updating the
+      "Last updated" date at the top. Continued use of the extension after changes constitutes
+      acceptance.
+    </p>
+
+    <div class="footer">
+      Questions or requests? Contact us at <a href="mailto:123ankit321@gmail.com">123ankit321@gmail.com</a>
     </div>
   </div>
 </body>
