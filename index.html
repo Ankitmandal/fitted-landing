@@ -20,7 +20,6 @@
   --gold-dim: rgba(196,154,60,0.08);
   --green: #5a9e72;
   --green-bg: rgba(90,158,114,0.08);
-  --red: #b85a4a;
 }
 
 html, body { height: 100%; overflow: hidden; }
@@ -87,77 +86,44 @@ nav {
   color: var(--text-2);
   line-height: 1.6;
   max-width: 420px;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 }
 
-/* ---- EMAIL + DOWNLOAD ---- */
-.download-group {
+/* ---- CTA ---- */
+.cta-group {
   display: flex;
   flex-direction: column;
   gap: 10px;
   align-items: flex-start;
 }
 
-.email-row {
-  display: flex;
-  align-items: stretch;
-}
-
-.email-input {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.84rem;
-  color: var(--text);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px 0 0 8px;
-  border-right: none;
-  padding: 12px 18px;
-  width: 240px;
-  outline: none;
-  transition: border-color 0.25s;
-}
-.email-input::placeholder { color: var(--text-3); }
-.email-input:focus { border-color: rgba(196,154,60,0.3); }
-.email-input.error { border-color: var(--red); }
-
-.btn {
+.btn-chrome {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
+  gap: 10px;
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.86rem;
+  font-size: 0.92rem;
   font-weight: 600;
-  padding: 12px 24px;
-  border-radius: 0 8px 8px 0;
+  padding: 13px 28px;
+  border-radius: 10px;
   text-decoration: none;
   cursor: pointer;
   border: none;
+  background: var(--gold);
+  color: var(--bg);
   transition: all 0.2s;
   white-space: nowrap;
 }
 
-.btn-gold {
-  background: var(--gold);
-  color: var(--bg);
-}
-
-.btn-gold:hover:not(:disabled) {
+.btn-chrome:hover {
   background: #d0a644;
   transform: translateY(-1px);
   box-shadow: 0 4px 20px rgba(196,154,60,0.18);
 }
 
-.btn-gold:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-.btn svg { width: 15px; height: 15px; }
+.btn-chrome svg { width: 18px; height: 18px; }
 
 .cta-meta {
-  margin-top: 4px;
   font-size: 0.73rem;
   color: var(--text-3);
   line-height: 1.5;
@@ -226,14 +192,7 @@ nav {
 }
 .vf-body { flex: 1; min-height: 0; }
 .vf-body video { width: 100%; height: 100%; object-fit: cover; display: block; }
-.video-placeholder {
-  width: 100%; height: 100%;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 10px; color: var(--text-3);
-}
-.video-placeholder svg { width: 40px; height: 40px; opacity: 0.25; }
-.video-placeholder p { font-size: 0.72rem; }
+.vf-body iframe { width: 100%; height: 100%; border: none; display: block; }
 
 /* ---- FOOTER BAR ---- */
 .foot-bar {
@@ -252,167 +211,6 @@ nav {
 }
 .foot-links a:hover { color: var(--text-2); }
 
-/* ============================================
-   INSTALL OVERLAY
-   ============================================ */
-.install-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  background: var(--bg);
-  overflow-y: auto;
-  transform: translateY(100%);
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.install-overlay.open {
-  transform: translateY(0);
-}
-
-.install-nav {
-  position: sticky;
-  top: 0;
-  padding: 14px 36px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(12,12,11,0.9);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-  z-index: 10;
-}
-
-.install-nav-title {
-  font-family: 'Instrument Serif', serif;
-  font-size: 1rem;
-  color: var(--text);
-}
-
-.close-btn {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: var(--text-3);
-  background: none;
-  border: 1px solid var(--border);
-  padding: 6px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.close-btn:hover { color: var(--text-2); border-color: rgba(255,255,255,0.1); }
-
-.install-body {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 56px 28px 80px;
-}
-
-.install-hero {
-  text-align: center;
-  margin-bottom: 56px;
-}
-
-.install-hero .check-icon {
-  width: 48px; height: 48px;
-  border-radius: 50%;
-  background: var(--green-bg);
-  border: 1px solid rgba(90,158,114,0.15);
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 16px;
-  color: var(--green);
-}
-.install-hero .check-icon svg { width: 22px; height: 22px; }
-
-.install-hero h2 {
-  font-family: 'Instrument Serif', serif;
-  font-size: 1.6rem;
-  color: var(--text);
-  margin-bottom: 6px;
-}
-
-.install-hero p {
-  font-size: 0.88rem;
-  color: var(--text-2);
-}
-
-.step {
-  display: grid;
-  grid-template-columns: 40px 1fr;
-  gap: 16px;
-  margin-bottom: 32px;
-  align-items: start;
-}
-
-.step-num {
-  width: 36px; height: 36px; border-radius: 50%;
-  background: var(--gold-dim);
-  border: 1px solid rgba(196,154,60,0.12);
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Instrument Serif', serif;
-  font-size: 0.95rem; color: var(--gold);
-  flex-shrink: 0; margin-top: 2px;
-}
-
-.step-content h3 {
-  font-size: 0.92rem; font-weight: 600;
-  color: var(--text); margin-bottom: 6px;
-}
-
-.step-content p {
-  font-size: 0.82rem; color: var(--text-2); line-height: 1.6;
-}
-
-.step-content code {
-  font-family: 'SF Mono', 'Fira Code', monospace;
-  font-size: 0.76rem; color: var(--gold);
-  background: var(--gold-dim); padding: 1px 6px; border-radius: 4px;
-}
-
-.step-content .tip {
-  margin-top: 8px;
-  font-size: 0.75rem; color: var(--text-3);
-  line-height: 1.5;
-  padding-left: 12px;
-  border-left: 2px solid rgba(255,255,255,0.06);
-}
-
-.step-content .screenshot-placeholder {
-  margin-top: 12px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 20px;
-  font-size: 0.72rem;
-  color: var(--text-3);
-  text-align: center;
-}
-
-.done-box {
-  margin-top: 48px;
-  background: var(--green-bg);
-  border: 1px solid rgba(90,158,114,0.12);
-  border-radius: 10px;
-  padding: 24px 28px;
-}
-
-.done-box h3 {
-  font-size: 0.92rem; font-weight: 600;
-  color: var(--green); margin-bottom: 6px;
-}
-
-.done-box p {
-  font-size: 0.82rem; color: var(--text-2); line-height: 1.6;
-}
-
-.done-box p + p { margin-top: 10px; }
-
-.done-box a {
-  color: var(--gold); text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
 /* ---- MOBILE ---- */
 @media (max-width: 850px) {
   .hero { grid-template-columns: 1fr; }
@@ -424,14 +222,11 @@ nav {
     padding-top: 32px;
   }
   .sub { max-width: 480px; }
-  .email-row { width: 100%; max-width: 360px; }
-  .email-input { flex: 1; width: auto; min-width: 0; }
-  .btn { flex-shrink: 0; }
+  .cta-group { align-items: center; }
   .platforms { justify-content: center; flex-wrap: wrap; }
   .right { padding: 0 24px 24px; min-height: 40vh; }
   .cta-meta { text-align: center; }
   .foot-bar { padding: 10px 24px; }
-  .install-body { padding: 40px 20px 60px; }
 }
 </style>
 </head>
@@ -441,9 +236,8 @@ nav {
 <nav>
   <div class="logo">Fitted</div>
   <div class="nav-links">
-    <a href="mailto:ankitmandal.dev@gmail.com">Contact</a>
-    <a href="#feedback">Feedback</a>
-    <a href="#">Privacy</a>
+    <a href="privacy-policy.html">Privacy</a>
+    <a href="mailto:123ankit321@gmail.com">Contact</a>
   </div>
 </nav>
 
@@ -454,13 +248,13 @@ nav {
     <h1 class="headline">Most resumes get rejected for <em>how</em> you describe your skills — not&nbsp;the skills themselves.</h1>
     <p class="sub">Fitted reads the job description, grades your fit requirement by requirement, and rewrites your resume to close the gap. No keyword stuffing. No fabrication.</p>
 
-    <div class="download-group">
-      <div class="email-row">
-        <input type="email" id="emailInput" class="email-input" placeholder="you@email.com" autocomplete="email">
-        <button id="downloadBtn" class="btn btn-gold" disabled>Download free</button>
-      </div>
+    <div class="cta-group">
+      <a href="https://chromewebstore.google.com/detail/fitted-ai-resume-tailoring/pipcngclagdippbbmpkoccbdhcaofgcm" target="_blank" rel="noopener" class="btn-chrome">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3.14.69 4.22 1.78L13.41 9.6A3.014 3.014 0 0 0 12 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c1.1 0 2.07-.6 2.59-1.49h4.15c-.73 3.17-3.53 5.49-6.74 5.49-3.87 0-7-3.13-7-7s3.13-7 7-7z"/></svg>
+        Add to Chrome — free
+      </a>
       <p class="cta-meta">
-        <span class="free-tag">Free</span> 10 job analyses/day · 5 resume refactors/mo
+        <span class="free-tag">Free</span> 10 job analyses/day &middot; 5 resume refactors/mo
       </p>
     </div>
 
@@ -468,6 +262,7 @@ nav {
       <span>LinkedIn</span><span class="pdot"></span>
       <span>Indeed</span><span class="pdot"></span>
       <span>Naukri</span><span class="pdot"></span>
+      <span>Glassdoor</span><span class="pdot"></span>
       <span>Any career page</span>
     </div>
   </div>
@@ -479,7 +274,7 @@ nav {
         <span class="vf-url">linkedin.com/jobs/view/senior-data-engineer</span>
       </div>
       <div class="vf-body">
-        <iframe src="https://www.youtube.com/embed/xZIJPtTmizo?modestbranding=1&rel=0&playsinline=1" frameborder="0" allow="encrypted-media" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>
+        <iframe src="https://www.youtube.com/embed/xZIJPtTmizo?modestbranding=1&rel=0&playsinline=1" allow="encrypted-media" allowfullscreen></iframe>
       </div>
     </div>
   </div>
@@ -488,143 +283,12 @@ nav {
 
 <!-- ============ FOOTER BAR ============ -->
 <div class="foot-bar">
-  <span>Made by Ankit Mandal · Bangalore</span>
+  <span>Made by Ankit Mandal &middot; Bangalore</span>
   <div class="foot-links">
-    <a href="mailto:ankitmandal.dev@gmail.com">ankitmandal.dev@gmail.com</a>
-    <a href="#">GitHub</a>
+    <a href="mailto:123ankit321@gmail.com">123ankit321@gmail.com</a>
+    <a href="privacy-policy.html">Privacy</a>
   </div>
 </div>
-
-<!-- ============ INSTALL OVERLAY (hidden until download) ============ -->
-<div class="install-overlay" id="installOverlay">
-  <div class="install-nav">
-    <span class="install-nav-title">Fitted — Install Guide</span>
-    <button class="close-btn" id="closeInstall">✕ Close</button>
-  </div>
-
-  <div class="install-body">
-
-    <div class="install-hero">
-      <div class="check-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-      </div>
-      <h2>Download started.</h2>
-      <p>Follow these 4 steps to finish installing. Takes about 2 minutes.</p>
-    </div>
-
-    <div class="step">
-      <div class="step-num">1</div>
-      <div class="step-content">
-        <h3>Unzip the file</h3>
-        <p>Find <code>fitted-v0.1.0.zip</code> in your downloads. Right-click → Extract All (Windows) or double-click (Mac). You'll get a folder called <code>fitted-v0.1.0</code>.</p>
-        <div class="tip">Keep this folder somewhere permanent — Desktop or Documents. Chrome needs it to run the extension.</div>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="step-num">2</div>
-      <div class="step-content">
-        <h3>Open Chrome Extensions page</h3>
-        <p>Paste this in your address bar and hit Enter:</p>
-        <p style="margin-top:6px"><code>chrome://extensions</code></p>
-        <div class="tip">Or: Chrome menu (⋮) → Extensions → Manage Extensions</div>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="step-num">3</div>
-      <div class="step-content">
-        <h3>Turn on Developer Mode</h3>
-        <p>Find the <strong>"Developer mode"</strong> toggle in the top-right corner. Switch it on.</p>
-        <img src="install-step3.png" alt="Developer Mode toggle" style="margin-top:12px; width:100%; max-width:100%; border-radius:8px; border:1px solid var(--border);">
-        <div class="tip">This is safe and standard for extensions not yet on the Chrome Web Store.</div>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="step-num">4</div>
-      <div class="step-content">
-        <h3>Load the extension</h3>
-        <p>Click <strong>"Load unpacked"</strong> in the top-left. Navigate to the <code>fitted-v0.1.0</code> folder you unzipped. Select it.</p>
-        <img src="install-step4.png" alt="Load Unpacked button" style="margin-top:12px; width:100%; max-width:100%; border-radius:8px; border:1px solid var(--border);">
-        <img src="install-step5.png" alt="Select the fitted-v0.1.0 folder" style="margin-top:10px; width:100%; max-width:100%; border-radius:8px; border:1px solid var(--border);">
-        <p style="margin-top:10px">The Fitted icon should now appear in your Chrome toolbar.</p>
-      </div>
-    </div>
-
-    <div class="done-box">
-      <h3>You're ready.</h3>
-      <p>Open any job listing on LinkedIn, Indeed, or Naukri. Fitted will auto-detect the JD and show your match analysis in the side panel.</p>
-      <p>It'll ask you to upload your resume the first time — after that, it works automatically on every job page you visit.</p>
-      <p>Something broken? <a href="mailto:ankitmandal.dev@gmail.com">Email me</a> — I usually respond within a few hours.</p>
-    </div>
-
-  </div>
-</div>
-
-<!-- ============ SCRIPT ============ -->
-<script>
-const emailInput = document.getElementById('emailInput');
-const downloadBtn = document.getElementById('downloadBtn');
-const overlay = document.getElementById('installOverlay');
-const closeBtn = document.getElementById('closeInstall');
-
-// Simple email validation
-function isValidEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-// Enable/disable button based on email
-emailInput.addEventListener('input', () => {
-  emailInput.classList.remove('error');
-  downloadBtn.disabled = !isValidEmail(emailInput.value.trim());
-});
-
-// Handle download
-downloadBtn.addEventListener('click', () => {
-  const email = emailInput.value.trim();
-
-  if (!isValidEmail(email)) {
-    emailInput.classList.add('error');
-    emailInput.focus();
-    return;
-  }
-
-  // ---- STORE THE EMAIL (Google Form) ----
-  // TODO: Replace GOOGLE_FORM_ID and ENTRY_FIELD_ID with your actual values
-  const formUrl = 'https://docs.google.com/forms/d/e/GOOGLE_FORM_ID/formResponse';
-  const entryId = 'entry.ENTRY_FIELD_ID';
-  fetch(`${formUrl}?${entryId}=${encodeURIComponent(email)}`, { mode: 'no-cors' }).catch(() => {});
-
-  // ---- TRIGGER ZIP DOWNLOAD ----
-  const link = document.createElement('a');
-  link.href = 'https://ankitmandal.github.io/fitted-landing/fitted-v0.1.0.zip';
-  link.download = 'fitted-v0.1.0.zip';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-
-  // ---- SHOW INSTALL GUIDE ----
-  setTimeout(() => {
-    overlay.classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }, 300);
-});
-
-// Close overlay
-closeBtn.addEventListener('click', () => {
-  overlay.classList.remove('open');
-  document.body.style.overflow = '';
-});
-
-// Escape key closes
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && overlay.classList.contains('open')) {
-    overlay.classList.remove('open');
-    document.body.style.overflow = '';
-  }
-});
-</script>
 
 </body>
 </html>
